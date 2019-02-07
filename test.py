@@ -15,5 +15,3 @@ ax.grid()
 
 fig.savefig("test.png")
 plt.show()
-
-#asdasfasfasfasdfasda
