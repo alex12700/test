@@ -15,7 +15,7 @@ class MyWin(QtWidgets.QMainWindow):
     # Пока пустая функция которая выполняется
     # при нажатии на кнопку                  
     def DomainCheck(self):
-        pass
+        print("hello")
 
 if __name__=="__main__":
     app = QtWidgets.QApplication(sys.argv)

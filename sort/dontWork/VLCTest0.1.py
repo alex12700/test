@@ -1,5 +1,5 @@
 import vlc
-temp = "D:/download/music/qwe.mp3"
+temp = "D:\download\music\Rammstein - RADIO.mp3"
 player = vlc.MediaPlayer(temp)
 player.play()
 
