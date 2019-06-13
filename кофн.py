@@ -1,3 +1,6 @@
+# PyQt5 Video player
+#!/usr/bin/env python
+
 from PyQt5.QtCore import QDir, Qt, QUrl
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -11,20 +14,19 @@ class VideoWindow(QMainWindow):
 
     def __init__(self, parent=None):
         super(VideoWindow, self).__init__(parent)
-        self.setWindowTitle("PyQt5 VideoPlayer") 
+        self.setWindowTitle("ver0.3.4") 
 
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
         videoWidget = QVideoWidget()
+        videoWidget2 = QVideoWidget()
+        videoWidget3 = QVideoWidget()
+        videoWidget4 = QVideoWidget()
 
         self.playButton = QPushButton()
         self.playButton.setEnabled(False)
         self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
         self.playButton.clicked.connect(self.play)
-
-        self.positionSlider = QSlider(Qt.Horizontal)
-        self.positionSlider.setRange(0, 0)
-        self.positionSlider.sliderMoved.connect(self.setPosition)
 
         self.errorLabel = QLabel()
         self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
@@ -57,10 +59,13 @@ class VideoWindow(QMainWindow):
         controlLayout = QHBoxLayout()
         controlLayout.setContentsMargins(0, 0, 0, 0)
         controlLayout.addWidget(self.playButton)
-        controlLayout.addWidget(self.positionSlider)
+        # controlLayout.addWidget(self.positionSlider)
 
         layout = QVBoxLayout()
         layout.addWidget(videoWidget)
+        layout.addWidget(videoWidget2)
+        layout.addWidget(videoWidget3)
+        layout.addWidget(videoWidget4)
         layout.addLayout(controlLayout)
         layout.addWidget(self.errorLabel)
 
@@ -68,19 +73,15 @@ class VideoWindow(QMainWindow):
         wid.setLayout(layout)
 
         self.mediaPlayer.setVideoOutput(videoWidget)
-        self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
-        self.mediaPlayer.positionChanged.connect(self.positionChanged)
-        self.mediaPlayer.durationChanged.connect(self.durationChanged)
+        # self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
+        # self.mediaPlayer.positionChanged.connect(self.positionChanged)
+        # self.mediaPlayer.durationChanged.connect(self.durationChanged)
         self.mediaPlayer.error.connect(self.handleError)
 
     def openFile(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open Movie",
-                QDir.homePath())
-
-        if fileName != '':
-            self.mediaPlayer.setMedia(
-                    QMediaContent(QUrl.fromLocalFile(fileName)))
-            self.playButton.setEnabled(True)
+        self.mediaPlayer.setMedia(
+                QMediaContent(QUrl('rtsp://127.0.0.1:5554/user=user&password=&channel=1&stream=1.sdp?real_stream')))
+        self.playButton.setEnabled(True)
 
     def exitCall(self):
         sys.exit(app.exec_())
@@ -112,9 +113,22 @@ class VideoWindow(QMainWindow):
         self.playButton.setEnabled(False)
         self.errorLabel.setText("Error: " + self.mediaPlayer.errorString())
 
+from sshtunnel import SSHTunnelForwarder
+
 if __name__ == '__main__':
+    # server = SSHTunnelForwarder(
+    #     '212.8.234.46',
+    #     ssh_username="judchin",
+    #     ssh_password="ENDifyQQ1",
+    #     remote_bind_address=('10.8.0.14', 554)
+    # )
+
+    # server.start()
+
     app = QApplication(sys.argv)
     player = VideoWindow()
     player.resize(640, 480)
     player.show()
     sys.exit(app.exec_())
+
+    # server.stop()
